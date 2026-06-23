@@ -4,6 +4,15 @@ A circular progress ring card for displaying sensor values, percentages, or any 
 
 ## Installation
 
+### HACS (recommended)
+
+1. In Home Assistant, go to **HACS → Frontend → ⋮ → Custom repositories**
+2. Add this repository URL and set the category to **Lovelace**
+3. Click **Download** on the radial-card entry
+4. Restart Home Assistant
+
+### Manual
+
 1. Copy `radial-card.js` to your Home Assistant `config/www/` folder.
 2. Add the resource in your Lovelace dashboard:
    - **Settings → Dashboards → Resources → Add Resource**
