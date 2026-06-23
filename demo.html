@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radial Card Demo</title>
+  <style>
+    body {
+      background: #f0f4f8;
+      font-family: sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 32px;
+      justify-content: center;
+    }
+    h1 {
+      width: 100%;
+      text-align: center;
+      color: #333;
+      margin-bottom: 0;
+    }
+    p.sub {
+      width: 100%;
+      text-align: center;
+      color: #666;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Radial Card Demo</h1>
+  <p class="sub">Static previews — no Home Assistant required</p>
+
+  <!-- Basic usage -->
+  <daires-hass-cards-radial-card id="card1"></daires-hass-cards-radial-card>
+
+  <!-- Battery style -->
+  <daires-hass-cards-radial-card id="card2"></daires-hass-cards-radial-card>
+
+  <!-- Temperature style -->
+  <daires-hass-cards-radial-card id="card3"></daires-hass-cards-radial-card>
+
+  <!-- Custom range -->
+  <daires-hass-cards-radial-card id="card4"></daires-hass-cards-radial-card>
+
+  <!-- Custom padding -->
+  <daires-hass-cards-radial-card id="card5"></daires-hass-cards-radial-card>
+
+  <script>
+    // Polyfill ha-card as a plain div for the demo
+    if (!customElements.get("ha-card")) {
+      customElements.define("ha-card", class extends HTMLElement {
+        connectedCallback() {
+          this.style.cssText = "display:block;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);overflow:hidden;";
+        }
+      });
+    }
+  </script>
+  <script src="radial-card.js"></script>
+  <script>
+    document.getElementById("card1").setConfig({
+      title: "CPU Usage",
+      value: 68,
+      unit: "%",
+      text: "68%",
+      label: "CPU",
+      color: "#03a9f4",
+      size: 180,
+    });
+
+    document.getElementById("card2").setConfig({
+      title: "Battery",
+      value: 42,
+      unit: "%",
+      text: "42%",
+      label: "Charging",
+      color: "#4caf50",
+      track_color: "#e8f5e9",
+      size: 180,
+    });
+
+    document.getElementById("card3").setConfig({
+      title: "Temperature",
+      value: 22,
+      min: 0,
+      max: 40,
+      text: "22°C",
+      label: "Living Room",
+      color: "#ff7043",
+      track_color: "#fbe9e7",
+      size: 180,
+    });
+
+    document.getElementById("card4").setConfig({
+      title: "Storage",
+      value: 380,
+      min: 0,
+      max: 500,
+      text: "380 GB",
+      label: "Used",
+      color: "#9c27b0",
+      track_color: "#f3e5f5",
+      size: 180,
+      stroke_width: 14,
+    });
+
+    document.getElementById("card5").setConfig({
+      title: "Humidity",
+      value: 55,
+      unit: "%",
+      text: "55%",
+      label: "Bedroom",
+      color: "#00bcd4",
+      size: 180,
+      padding: 32,
+    });
+  </script>
+</body>
+</html>
