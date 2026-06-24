@@ -252,8 +252,8 @@
       ],
     });
 
-    document.addEventListener("hass-more-info", (e) => console.log("hass-more-info", e.detail));
-    document.addEventListener("location-changed", () => console.log("location-changed"));
+    document.addEventListener("hass-more-info", (e) => alert(`more-info: ${e.detail.entityId}`));
+    document.addEventListener("location-changed", () => alert(`navigate: ${window.location.pathname}`));
   </script>
 </body>
 </html>
