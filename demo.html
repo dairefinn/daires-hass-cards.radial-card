@@ -20,11 +20,30 @@
       color: #333;
       margin-bottom: 0;
     }
+    h2 {
+      width: 100%;
+      font-size: 13px;
+      font-weight: 500;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 8px 0 0;
+    }
     p.sub {
       width: 100%;
       text-align: center;
       color: #666;
       margin-top: 4px;
+    }
+    .full-width-row {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      gap: 24px;
+    }
+    .full-width-row daires-hass-cards-radial-card {
+      flex: 1;
+      height: 100%;
     }
   </style>
 </head>
@@ -32,23 +51,63 @@
   <h1>Radial Card Demo</h1>
   <p class="sub">Static previews — no Home Assistant required</p>
 
-  <!-- Basic usage -->
-  <daires-hass-cards-radial-card id="card1"></daires-hass-cards-radial-card>
+  <h2>Examples</h2>
+  <daires-hass-cards-radial-card id="ex-cpu"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="ex-battery"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="ex-temp"></daires-hass-cards-radial-card>
 
-  <!-- Battery style -->
-  <daires-hass-cards-radial-card id="card2"></daires-hass-cards-radial-card>
+  <h2>size</h2>
+  <daires-hass-cards-radial-card id="size-sm"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="size-md"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="size-lg"></daires-hass-cards-radial-card>
 
-  <!-- Temperature style -->
-  <daires-hass-cards-radial-card id="card3"></daires-hass-cards-radial-card>
+  <h2>stroke_width</h2>
+  <daires-hass-cards-radial-card id="stroke-thin"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="stroke-default"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="stroke-thick"></daires-hass-cards-radial-card>
 
-  <!-- Custom range -->
-  <daires-hass-cards-radial-card id="card4"></daires-hass-cards-radial-card>
+  <h2>color &amp; track_color</h2>
+  <daires-hass-cards-radial-card id="color-blue"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="color-green"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="color-red"></daires-hass-cards-radial-card>
 
-  <!-- Custom padding -->
-  <daires-hass-cards-radial-card id="card5"></daires-hass-cards-radial-card>
+  <h2>start_angle</h2>
+  <daires-hass-cards-radial-card id="angle-top"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="angle-right"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="angle-bottom"></daires-hass-cards-radial-card>
+
+  <h2>font_size &amp; label_font_size</h2>
+  <daires-hass-cards-radial-card id="font-small"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="font-default"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="font-large"></daires-hass-cards-radial-card>
+
+  <h2>text_color &amp; label_color</h2>
+  <daires-hass-cards-radial-card id="textcolor-default"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="textcolor-matched"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="textcolor-contrast"></daires-hass-cards-radial-card>
+
+  <h2>background</h2>
+  <daires-hass-cards-radial-card id="bg-white"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="bg-dark"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="bg-tinted"></daires-hass-cards-radial-card>
+
+  <h2>padding</h2>
+  <daires-hass-cards-radial-card id="pad-none"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="pad-default"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="pad-large"></daires-hass-cards-radial-card>
+
+  <h2>min &amp; max</h2>
+  <daires-hass-cards-radial-card id="range-default"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="range-temp"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="range-custom"></daires-hass-cards-radial-card>
+
+  <h2>Full width (height-constrained)</h2>
+  <div class="full-width-row">
+    <daires-hass-cards-radial-card id="fw-1"></daires-hass-cards-radial-card>
+    <daires-hass-cards-radial-card id="fw-2"></daires-hass-cards-radial-card>
+  </div>
 
   <script>
-    // Polyfill ha-card as a plain div for the demo
     if (!customElements.get("ha-card")) {
       customElements.define("ha-card", class extends HTMLElement {
         connectedCallback() {
@@ -59,61 +118,116 @@
   </script>
   <script src="radial-card.js"></script>
   <script>
-    document.getElementById("card1").setConfig({
-      title: "CPU Usage",
-      value: 68,
-      unit: "%",
-      text: "68%",
-      label: "CPU",
-      color: "#03a9f4",
-      size: 180,
+    // ── Examples ──────────────────────────────────────────────────────────────
+    document.getElementById("ex-cpu").setConfig({
+      title: "CPU Usage", value: 68, text: "68%", label: "CPU",
+      color: "#03a9f4", size: 180,
+    });
+    document.getElementById("ex-battery").setConfig({
+      title: "Battery", value: 42, text: "42%", label: "Charging",
+      color: "#4caf50", track_color: "#e8f5e9", size: 180,
+    });
+    document.getElementById("ex-temp").setConfig({
+      title: "Temperature", value: 22, min: 0, max: 40,
+      text: "22°C", label: "Living Room",
+      color: "#ff7043", track_color: "#fbe9e7", size: 180,
     });
 
-    document.getElementById("card2").setConfig({
-      title: "Battery",
-      value: 42,
-      unit: "%",
-      text: "42%",
-      label: "Charging",
-      color: "#4caf50",
-      track_color: "#e8f5e9",
-      size: 180,
+    // ── size ──────────────────────────────────────────────────────────────────
+    const sizeBase = { value: 75, text: "75%", label: "Wi-Fi", color: "#03a9f4" };
+    document.getElementById("size-sm").setConfig({ ...sizeBase, title: "size: 120", size: 120 });
+    document.getElementById("size-md").setConfig({ ...sizeBase, title: "size: 200 (default)", size: 200 });
+    document.getElementById("size-lg").setConfig({ ...sizeBase, title: "size: 300", size: 300 });
+
+    // ── stroke_width ──────────────────────────────────────────────────────────
+    const strokeBase = { value: 60, text: "60%", label: "Disk", color: "#9c27b0", track_color: "#f3e5f5", size: 180 };
+    document.getElementById("stroke-thin").setConfig({ ...strokeBase, title: "stroke_width: 4", stroke_width: 4 });
+    document.getElementById("stroke-default").setConfig({ ...strokeBase, title: "stroke_width: 10 (default)", stroke_width: 10 });
+    document.getElementById("stroke-thick").setConfig({ ...strokeBase, title: "stroke_width: 20", stroke_width: 20 });
+
+    // ── color & track_color ───────────────────────────────────────────────────
+    document.getElementById("color-blue").setConfig({
+      title: "color / track_color", value: 65, text: "65%", label: "Blue",
+      color: "#03a9f4", track_color: "#e1f5fe", size: 180,
+    });
+    document.getElementById("color-green").setConfig({
+      title: "color / track_color", value: 65, text: "65%", label: "Green",
+      color: "#4caf50", track_color: "#e8f5e9", size: 180,
+    });
+    document.getElementById("color-red").setConfig({
+      title: "color / track_color", value: 65, text: "65%", label: "Red",
+      color: "#f44336", track_color: "#ffebee", size: 180,
     });
 
-    document.getElementById("card3").setConfig({
-      title: "Temperature",
-      value: 22,
-      min: 0,
-      max: 40,
-      text: "22°C",
-      label: "Living Room",
-      color: "#ff7043",
-      track_color: "#fbe9e7",
-      size: 180,
+    // ── start_angle ───────────────────────────────────────────────────────────
+    const angleBase = { value: 60, text: "60%", label: "Power", color: "#ff9800", track_color: "#fff3e0", size: 180 };
+    document.getElementById("angle-top").setConfig({ ...angleBase, title: "start_angle: -90 (default)", start_angle: -90 });
+    document.getElementById("angle-right").setConfig({ ...angleBase, title: "start_angle: 0", start_angle: 0 });
+    document.getElementById("angle-bottom").setConfig({ ...angleBase, title: "start_angle: 90", start_angle: 90 });
+
+    // ── font_size & label_font_size ───────────────────────────────────────────
+    const fontBase = { value: 80, text: "80%", label: "Storage", color: "#607d8b", size: 180 };
+    document.getElementById("font-small").setConfig({ ...fontBase, title: "font_size: 14  label_font_size: 10", font_size: 14, label_font_size: 10 });
+    document.getElementById("font-default").setConfig({ ...fontBase, title: "font_size: 22  label_font_size: 13 (default)" });
+    document.getElementById("font-large").setConfig({ ...fontBase, title: "font_size: 32  label_font_size: 16", font_size: 32, label_font_size: 16 });
+
+    // ── text_color & label_color ──────────────────────────────────────────────
+    document.getElementById("textcolor-default").setConfig({
+      title: "text_color / label_color (default)", value: 50, text: "50%", label: "Default",
+      color: "#03a9f4", size: 180,
+    });
+    document.getElementById("textcolor-matched").setConfig({
+      title: "Matched to arc color", value: 50, text: "50%", label: "Matched",
+      color: "#4caf50", text_color: "#4caf50", label_color: "#4caf50", size: 180,
+    });
+    document.getElementById("textcolor-contrast").setConfig({
+      title: "High contrast", value: 50, text: "50%", label: "Contrast",
+      color: "#e91e63", text_color: "#880e4f", label_color: "#ad1457", size: 180,
     });
 
-    document.getElementById("card4").setConfig({
-      title: "Storage",
-      value: 380,
-      min: 0,
-      max: 500,
-      text: "380 GB",
-      label: "Used",
-      color: "#9c27b0",
-      track_color: "#f3e5f5",
-      size: 180,
-      stroke_width: 14,
+    // ── background ────────────────────────────────────────────────────────────
+    document.getElementById("bg-white").setConfig({
+      title: "background: #fff (default)", value: 70, text: "70%", label: "Light",
+      color: "#03a9f4", background: "#ffffff", size: 180,
+    });
+    document.getElementById("bg-dark").setConfig({
+      title: "background: #1c1c1e", value: 70, text: "70%", label: "Dark",
+      color: "#03a9f4", background: "#1c1c1e",
+      text_color: "#ffffff", label_color: "#aaaaaa", size: 180,
+    });
+    document.getElementById("bg-tinted").setConfig({
+      title: "background: #e3f2fd", value: 70, text: "70%", label: "Tinted",
+      color: "#1565c0", track_color: "#bbdefb", background: "#e3f2fd", size: 180,
     });
 
-    document.getElementById("card5").setConfig({
-      title: "Humidity",
-      value: 55,
-      unit: "%",
-      text: "55%",
-      label: "Bedroom",
-      color: "#00bcd4",
-      size: 180,
-      padding: 32,
+    // ── padding ───────────────────────────────────────────────────────────────
+    const padBase = { value: 55, text: "55%", label: "Memory", color: "#00bcd4", size: 180 };
+    document.getElementById("pad-none").setConfig({ ...padBase, title: "padding: 0", padding: 0 });
+    document.getElementById("pad-default").setConfig({ ...padBase, title: "padding: 16 (default)", padding: 16 });
+    document.getElementById("pad-large").setConfig({ ...padBase, title: "padding: 40", padding: 40 });
+
+    // ── min & max ─────────────────────────────────────────────────────────────
+    document.getElementById("range-default").setConfig({
+      title: "min: 0  max: 100 (default)", value: 68, text: "68%", label: "Default range",
+      color: "#03a9f4", size: 180,
+    });
+    document.getElementById("range-temp").setConfig({
+      title: "min: 0  max: 40", value: 22, text: "22°C", label: "Temperature",
+      color: "#ff7043", track_color: "#fbe9e7", min: 0, max: 40, size: 180,
+    });
+    document.getElementById("range-custom").setConfig({
+      title: "min: 100  max: 500", value: 380, text: "380 GB", label: "Storage used",
+      color: "#9c27b0", track_color: "#f3e5f5", min: 100, max: 500, size: 180,
+    });
+
+    // ── Full width ────────────────────────────────────────────────────────────
+    document.getElementById("fw-1").setConfig({
+      title: "Full width — size: 300 in 160px container",
+      value: 68, text: "68%", label: "CPU", color: "#03a9f4", size: 300,
+    });
+    document.getElementById("fw-2").setConfig({
+      title: "Full width — size: 300 in 160px container",
+      value: 42, text: "42%", label: "Charging", color: "#4caf50", track_color: "#e8f5e9", size: 300,
     });
   </script>
 </body>
