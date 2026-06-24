@@ -64,7 +64,7 @@ class RadialCard extends HTMLElement {
       this._hass.callService(domain, service, interaction.service_data ?? {});
     } else if (action === "navigate") {
       if (!interaction.path) return;
-      window.history.pushState(null, "", interaction.path);
+      try { window.history.pushState(null, "", interaction.path); } catch (_) {}
       this.dispatchEvent(new CustomEvent("location-changed", { bubbles: true, composed: true }));
     } else if (action === "url") {
       if (!interaction.url) return;
