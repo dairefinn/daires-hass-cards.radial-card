@@ -1,8 +1,8 @@
 # Radial card
 
-A circular progress ring card for displaying sensor values, percentages, or any numeric entity. Designed to scale to mobile devices.
+A circular progress ring card for displaying sensor values, percentages, or any numeric entity. Designed to scale to
 
-<img width="1849" height="460" alt="image" src="https://github.com/user-attachments/assets/ef273e20-13f8-45d1-a0d8-2fcc8c5def9f" />
+<img width="1121" height="1227" alt="image" src="https://github.com/user-attachments/assets/a0f62714-200e-4892-bc31-7e2c7a924fc3" />
 
 ## Installation
 
