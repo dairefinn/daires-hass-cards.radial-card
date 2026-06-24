@@ -107,6 +107,11 @@
     <daires-hass-cards-radial-card id="fw-2"></daires-hass-cards-radial-card>
   </div>
 
+  <h2>interactions</h2>
+  <daires-hass-cards-radial-card id="int-tap-more-info"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="int-tap-navigate"></daires-hass-cards-radial-card>
+  <daires-hass-cards-radial-card id="int-multi"></daires-hass-cards-radial-card>
+
   <script>
     if (!customElements.get("ha-card")) {
       customElements.define("ha-card", class extends HTMLElement {
@@ -229,6 +234,26 @@
       title: "Full width — size: 300 in 160px container",
       value: 42, text: "42%", label: "Charging", color: "#4caf50", track_color: "#e8f5e9", size: 300,
     });
+
+    // ── interactions ──────────────────────────────────────────────────────────
+    document.getElementById("int-tap-more-info").setConfig({
+      title: "Tap: more-info", value: 68, text: "68%", label: "CPU", color: "#03a9f4", size: 180,
+      interactions: [{ action: "more-info", entity: "sensor.cpu_usage" }],
+    });
+    document.getElementById("int-tap-navigate").setConfig({
+      title: "Tap: navigate", value: 42, text: "42%", label: "Battery", color: "#4caf50", size: 180,
+      interactions: [{ action: "navigate", path: "/lovelace/system" }],
+    });
+    document.getElementById("int-multi").setConfig({
+      title: "Tap + hold", value: 22, text: "22°C", label: "Temp", color: "#ff7043", size: 180,
+      interactions: [
+        { trigger: "tap", action: "more-info", entity: "sensor.temperature" },
+        { trigger: "hold", action: "navigate", path: "/lovelace/climate" },
+      ],
+    });
+
+    document.addEventListener("hass-more-info", (e) => console.log("hass-more-info", e.detail));
+    document.addEventListener("location-changed", () => console.log("location-changed"));
   </script>
 </body>
 </html>

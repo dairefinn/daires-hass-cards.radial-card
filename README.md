@@ -44,8 +44,28 @@ A circular progress ring card for displaying sensor values, percentages, or any 
 | `label_color` | string | `var(--secondary-text-color)` | Color of the secondary label |
 | `background` | string | `var(--card-background-color)` | Card background color |
 | `start_angle` | number | `-90` | Rotation of the ring start point in degrees |
+| `interactions` | list | — | Tap/hold/double-tap actions (see below) |
 
 Either `entity` or `value` is required.
+
+## Interactions
+
+Attach actions to `tap`, `hold` (500 ms), or `double_tap` events by adding an `interactions` list.
+
+```yaml
+interactions:
+  - trigger: tap        # tap | hold | double_tap  (default: tap)
+    action: more-info   # see action reference below
+```
+
+| Action | Extra fields | Description |
+|---|---|---|
+| `more-info` | `entity` (optional) | Open the HA more-info dialog. Defaults to the card's entity. |
+| `toggle` | `entity` (optional) | Toggle the entity. |
+| `call-service` | `service`, `service_data` | Call any HA service. `service` is `domain.service` format. |
+| `navigate` | `path` | Navigate to a Lovelace path. |
+| `url` | `url`, `target` | Open a URL. `target` defaults to `_blank`. |
+| `none` | — | Explicit no-op. |
 
 ## Examples
 
@@ -82,6 +102,21 @@ unit: "%"
 label: Charging
 color: "#4caf50"
 track_color: "#e8f5e9"
+```
+
+**With interactions:**
+```yaml
+type: custom:daires-hass-cards-radial-card
+title: CPU Usage
+entity: sensor.cpu_usage
+unit: "%"
+label: CPU
+interactions:
+  - trigger: tap
+    action: more-info
+  - trigger: hold
+    action: navigate
+    path: /lovelace/system
 ```
 
 ## Demo

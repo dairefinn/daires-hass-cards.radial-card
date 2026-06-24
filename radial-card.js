@@ -36,6 +36,90 @@ class RadialCard extends HTMLElement {
     return 0;
   }
 
+  _primaryEntity() {
+    return this._config.entity ?? null;
+  }
+
+  _handleInteraction(trigger) {
+    const interaction = (this._config.interactions ?? []).find(
+      (i) => (i.trigger ?? "tap") === trigger
+    );
+    if (!interaction) return;
+    const { action } = interaction;
+    if (action === "more-info") {
+      const entityId = interaction.entity ?? this._primaryEntity();
+      if (!entityId) return;
+      this.dispatchEvent(new CustomEvent("hass-more-info", {
+        detail: { entityId },
+        bubbles: true,
+        composed: true,
+      }));
+    } else if (action === "toggle") {
+      const entityId = interaction.entity ?? this._primaryEntity();
+      if (!entityId || !this._hass) return;
+      this._hass.callService("homeassistant", "toggle", { entity_id: entityId });
+    } else if (action === "call-service") {
+      if (!interaction.service || !this._hass) return;
+      const [domain, service] = interaction.service.split(".");
+      this._hass.callService(domain, service, interaction.service_data ?? {});
+    } else if (action === "navigate") {
+      if (!interaction.path) return;
+      window.history.pushState(null, "", interaction.path);
+      this.dispatchEvent(new CustomEvent("location-changed", { bubbles: true, composed: true }));
+    } else if (action === "url") {
+      if (!interaction.url) return;
+      window.open(interaction.url, interaction.target ?? "_blank");
+    }
+  }
+
+  _attachInteractionListeners() {
+    const interactions = this._config?.interactions;
+    if (!interactions?.length) return;
+
+    if (this._tapTimer) {
+      clearTimeout(this._tapTimer);
+      this._tapTimer = null;
+      this._tapCount = 0;
+    }
+
+    const card = this.shadowRoot.querySelector(".card");
+    if (!card) return;
+
+    const triggers = new Set(interactions.map((i) => i.trigger ?? "tap"));
+    card.style.cursor = "pointer";
+
+    if (triggers.has("tap") || triggers.has("double_tap")) {
+      card.addEventListener("click", (e) => {
+        if (e.target.closest("button")) return;
+        this._tapCount = (this._tapCount ?? 0) + 1;
+        if (this._tapCount === 1) {
+          this._tapTimer = setTimeout(() => {
+            this._tapCount = 0;
+            this._tapTimer = null;
+            this._handleInteraction("tap");
+          }, 250);
+        } else {
+          clearTimeout(this._tapTimer);
+          this._tapTimer = null;
+          this._tapCount = 0;
+          this._handleInteraction("double_tap");
+        }
+      });
+    }
+
+    if (triggers.has("hold")) {
+      let holdTimer;
+      const startHold = () => { holdTimer = setTimeout(() => this._handleInteraction("hold"), 500); };
+      const cancelHold = () => clearTimeout(holdTimer);
+      card.addEventListener("mousedown", startHold);
+      card.addEventListener("mouseup", cancelHold);
+      card.addEventListener("mouseleave", cancelHold);
+      card.addEventListener("touchstart", startHold, { passive: true });
+      card.addEventListener("touchend", cancelHold);
+      card.addEventListener("touchcancel", cancelHold);
+    }
+  }
+
   _render() {
     const config = this._config;
     const value = this._getValue();
@@ -144,6 +228,7 @@ class RadialCard extends HTMLElement {
         </div>
       </ha-card>
     `;
+    this._attachInteractionListeners();
   }
 }
 
