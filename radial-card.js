@@ -120,6 +120,14 @@ class RadialCard extends HTMLElement {
     }
   }
 
+  static getConfigElement() {
+    return document.createElement("daires-hass-cards-radial-card-editor");
+  }
+
+  static getStubConfig() {
+    return { value: 50, min: 0, max: 100 };
+  }
+
   _render() {
     const config = this._config;
     const value = this._getValue();
@@ -239,3 +247,106 @@ class RadialCard extends HTMLElement {
 }
 
 customElements.define("daires-hass-cards-radial-card", RadialCard);
+
+class RadialCardEditor extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    const p = this.shadowRoot.getElementById("entity");
+    if (p) p.hass = hass;
+  }
+
+  setConfig(config) {
+    this._config = { ...config };
+    this._render();
+  }
+
+  _fire() {
+    this.dispatchEvent(new CustomEvent("config-changed", {
+      detail: { config: { ...this._config } },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  _set(key, value) {
+    if (value === "" || value === undefined || value === null) {
+      delete this._config[key];
+    } else {
+      this._config[key] = value;
+    }
+    this._fire();
+  }
+
+  _render() {
+    const c = this._config ?? {};
+    this.shadowRoot.innerHTML = `
+      <style>
+        .form { display: flex; flex-direction: column; gap: 12px; padding: 16px 0; }
+        .section { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--secondary-text-color, #727272); padding-bottom: 4px; border-bottom: 1px solid var(--divider-color, #e0e0e0); margin-top: 8px; }
+        .row { display: flex; flex-direction: column; gap: 4px; }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        label { font-size: 12px; color: var(--secondary-text-color, #727272); }
+        input[type=text], input[type=number] { padding: 8px 10px; border: 1px solid var(--divider-color, #e0e0e0); border-radius: 6px; font-size: 14px; color: var(--primary-text-color, #212121); background: var(--card-background-color, #fff); box-sizing: border-box; width: 100%; }
+        ha-entity-picker { display: block; }
+      </style>
+      <div class="form">
+        <div class="section">Entity</div>
+        <ha-entity-picker id="entity" allow-custom-entity></ha-entity-picker>
+
+        <div class="section">Labels</div>
+        <div class="row"><label>Title</label><input id="title" type="text" placeholder="Card title" /></div>
+        <div class="row-2">
+          <div class="row"><label>Label</label><input id="label" type="text" placeholder="e.g. Temperature" /></div>
+          <div class="row"><label>Unit</label><input id="unit" type="text" placeholder="e.g. °C" /></div>
+        </div>
+
+        <div class="section">Range</div>
+        <div class="row-2">
+          <div class="row"><label>Min</label><input id="min" type="number" placeholder="0" /></div>
+          <div class="row"><label>Max</label><input id="max" type="number" placeholder="100" /></div>
+        </div>
+
+        <div class="section">Appearance</div>
+        <div class="row-2">
+          <div class="row"><label>Arc color</label><input id="color" type="text" placeholder="var(--primary-color)" /></div>
+          <div class="row"><label>Track color</label><input id="track_color" type="text" placeholder="var(--divider-color)" /></div>
+        </div>
+        <div class="row-2">
+          <div class="row"><label>Stroke width</label><input id="stroke_width" type="number" placeholder="10" /></div>
+          <div class="row"><label>Size (px)</label><input id="size" type="number" placeholder="200" /></div>
+        </div>
+        <div class="row-2">
+          <div class="row"><label>Start angle</label><input id="start_angle" type="number" placeholder="-90" /></div>
+        </div>
+      </div>
+    `;
+
+    const get = (id) => this.shadowRoot.getElementById(id);
+
+    const picker = get("entity");
+    picker.value = c.entity ?? "";
+    if (this._hass) picker.hass = this._hass;
+    picker.addEventListener("value-changed", (e) => this._set("entity", e.detail.value));
+
+    for (const id of ["title", "label", "unit", "color", "track_color"]) {
+      const el = get(id);
+      el.value = c[id] ?? "";
+      el.addEventListener("change", (e) => this._set(id, e.target.value));
+    }
+    for (const id of ["min", "max", "stroke_width", "size", "start_angle"]) {
+      const el = get(id);
+      el.value = c[id] ?? "";
+      el.addEventListener("change", (e) => {
+        const v = e.target.value;
+        this._set(id, v === "" ? undefined : parseFloat(v));
+      });
+    }
+  }
+}
+
+customElements.define("daires-hass-cards-radial-card-editor", RadialCardEditor);
