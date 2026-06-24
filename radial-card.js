@@ -149,6 +149,10 @@ class RadialCard extends HTMLElement {
       <style>
         :host {
           display: block;
+          height: 100%;
+        }
+        ha-card {
+          height: 100%;
         }
         .card {
           background: ${background};
@@ -159,6 +163,7 @@ class RadialCard extends HTMLElement {
           align-items: center;
           justify-content: center;
           box-sizing: border-box;
+          height: 100%;
         }
         .title {
           font-size: 14px;
@@ -170,6 +175,7 @@ class RadialCard extends HTMLElement {
         .radial-wrapper {
           position: relative;
           width: min(${size}px, 100%);
+          max-height: min(${size}px, 100%);
           aspect-ratio: 1 / 1;
         }
         svg {
